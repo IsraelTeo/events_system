@@ -1,8 +1,8 @@
 package com.proof.events_system.domain.entity;
 
-import com.proof.events_system.domain.enums.Role;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -22,7 +22,13 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
-    private Role role;
+    @OneToOne(
+            fetch = FetchType.EAGER,
+            targetEntity = RoleEntity.class,
+            cascade = CascadeType.PERSIST
+    )
+    @JoinColumn(name = "role_id")
+    private RoleEntity role;
 
     @OneToMany(
             targetEntity = Reservation.class,
@@ -31,16 +37,26 @@ public class UserEntity {
     @JoinColumn(name = "reservation_id")
     private List<Reservation> reservations;
 
+    @Temporal(TemporalType.DATE)
+    @Column(name="create_at", columnDefinition = "DATE")
+    private LocalDate createAt;
+
+    @PrePersist
+    public void prePersist(){
+        this.createAt = LocalDate.now();
+    }
+
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String firstName, String lastName, String password, Role role, List<Reservation> reservations) {
+    public UserEntity(Long id, String firstName, String lastName, String password, RoleEntity role, List<Reservation> reservations, LocalDate createAt) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.role = role;
         this.reservations = reservations;
+        this.createAt = createAt;
     }
 
     public Long getId() {
@@ -75,11 +91,11 @@ public class UserEntity {
         this.password = password;
     }
 
-    public Role getRole() {
+    public RoleEntity getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(RoleEntity role) {
         this.role = role;
     }
 
@@ -89,5 +105,13 @@ public class UserEntity {
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public LocalDate getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(LocalDate createAt) {
+        this.createAt = createAt;
     }
 }
