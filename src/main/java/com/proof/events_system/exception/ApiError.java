@@ -8,6 +8,9 @@ public enum ApiError {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User not found"),
     ROLE_NOT_FOUND(HttpStatus.NOT_FOUND, "Role not found"),
     RESERVATION_NOT_FOUND(HttpStatus.NOT_FOUND, "Reservation not found"),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Invalid token"),
+    BAD_CREDENTIALS(HttpStatus.UNAUTHORIZED, "Invalid email or password"),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "Bad request"),
 
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "Validation error"),
     ;

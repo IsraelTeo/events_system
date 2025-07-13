@@ -1,16 +1,14 @@
 package com.proof.events_system.dto;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 public class ReservationDTO {
-    @NotNull(message = "The user cannot be null")
-    @Valid
-    private UserEntityDTO userEntityDTO;
 
-    @NotNull(message = "The event cannot be null")
-    @Valid
-    private EventDTO eventDTO;
+    @NotNull(message = "The user ID cannot be null")
+    private Long userId;
+
+    @NotNull(message = "The event ID cannot be null")
+    private Long eventId;
 
     @NotNull(message = "The confirmation status cannot be null")
     private Boolean confirmation;
@@ -18,26 +16,26 @@ public class ReservationDTO {
     public ReservationDTO() {
     }
 
-    public ReservationDTO(UserEntityDTO userEntityDTO, EventDTO eventDTO, Boolean confirmation) {
-        this.userEntityDTO = userEntityDTO;
-        this.eventDTO = eventDTO;
+    public ReservationDTO(Long userId, Long eventId, Boolean confirmation) {
+        this.userId = userId;
+        this.eventId = eventId;
         this.confirmation = confirmation;
     }
 
-    public UserEntityDTO getUserEntityDTO() {
-        return userEntityDTO;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserEntityDTO(UserEntityDTO userEntityDTO) {
-        this.userEntityDTO = userEntityDTO;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public EventDTO getEventDTO() {
-        return eventDTO;
+    public Long getEventId() {
+        return eventId;
     }
 
-    public void setEventDTO (EventDTO eventDTO) {
-        this.eventDTO = eventDTO;
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
     }
 
     public Boolean getConfirmation() {

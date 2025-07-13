@@ -27,16 +27,21 @@ public class Event {
     @Column(nullable = false)
     private LocalDateTime dateTime;
 
+    // Nueva columna para rastrear disponibilidad
+    @Column(nullable = false)
+    private int availableSeats;
+
     public Event() {
     }
 
-    public Event(Long id, String title, String description, String location, int capacity, LocalDateTime dateTime) {
+    public Event(Long id, String title, String description, String location, int capacity, LocalDateTime dateTime, int availableSeats) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
         this.capacity = capacity;
         this.dateTime = dateTime;
+        this.availableSeats = availableSeats;
     }
 
     public Long getId() {
@@ -85,5 +90,13 @@ public class Event {
 
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public int getAvailableSeats() {
+        return availableSeats;
+    }
+
+    public void setAvailableSeats(int availableSeats) {
+        this.availableSeats = availableSeats;
     }
 }

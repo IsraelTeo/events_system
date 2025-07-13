@@ -9,6 +9,7 @@ import com.proof.events_system.service.interfaces.IUserService;
 import com.proof.events_system.util.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ public class UserService implements IUserService {
 
     private final UserMapper userMapper;
 
+    @Autowired
     public UserService(IUserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
@@ -87,6 +89,7 @@ public class UserService implements IUserService {
     private UserEntity updateFields(UserEntity user, UserEntityDTO userDTO) {
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
         user.setRole(user.getRole());
         return user;
     }

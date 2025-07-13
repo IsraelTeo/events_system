@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -45,10 +47,45 @@ public class EventService implements IEventService {
 
     @Transactional(readOnly = true)
     @Override
+    public List<EventDTO> getEventsByDate(LocalDate date){
+        LocalDateTime dateStart = date.atStartOfDay();
+        LocalDateTime dateEnd = date.atTime(23, 59, 59);
+        List<Event> events = eventRepository.findByDate(dateStart, dateEnd);
+        if (events.isEmpty()) {
+            LOGGER.info("Event list is empty.");
+            return Collections.emptyList();
+        }
+        return eventMapper.toListEventDTO(events);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<EventDTO> getEventsByLocation(String location){
+        List<Event> events = eventRepository.findByLocation(location);
+        if (events.isEmpty()) {
+            LOGGER.info("Events list is empty");
+            return Collections.emptyList();
+        }
+        return eventMapper.toListEventDTO(events);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public List<EventDTO> getAllEvents() {
         List<Event> events = eventRepository.findAll();
         if (events.isEmpty()) {
             LOGGER.info("Event list is empty");
+            return Collections.emptyList();
+        }
+        return eventMapper.toListEventDTO(events);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<EventDTO> getAvailableEvents() {
+        List<Event> events = eventRepository.findAvailableEvents();
+        if (events.isEmpty()) {
+            LOGGER.info("Events list is empty..");
             return Collections.emptyList();
         }
         return eventMapper.toListEventDTO(events);
@@ -92,6 +129,22 @@ public class EventService implements IEventService {
         event.setLocation(eventDTO.getLocation());
         event.setDateTime(eventDTO.getDateTime());
         return event;
+    }
+
+    public boolean reserveSeat(Event event) {
+        if (event.getAvailableSeats() > 0) {
+            event.setAvailableSeats(event.getAvailableSeats() - 1);
+            eventRepository.save(event);
+            return true;
+        }
+        return false;
+    }
+
+    public void cancelReservation(Event event) {
+        if (event.getAvailableSeats() < event.getCapacity()) {
+            event.setAvailableSeats(event.getAvailableSeats() + 1);
+            eventRepository.save(event);
+        }
     }
 
 }

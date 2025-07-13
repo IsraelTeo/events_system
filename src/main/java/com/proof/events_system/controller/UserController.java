@@ -1,7 +1,10 @@
 package com.proof.events_system.controller;
 
 import com.proof.events_system.dto.UserEntityDTO;
+import com.proof.events_system.payload.request.LoginRequest;
+import com.proof.events_system.payload.response.AuthResponse;
 import com.proof.events_system.payload.response.MessageResponse;
+import com.proof.events_system.auth.AuthService;
 import com.proof.events_system.service.implement.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -23,10 +26,12 @@ public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
+    private final AuthService authService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AuthService authService) {
         this.userService = userService;
+        this.authService = authService;
     }
 
     @GetMapping("/{id}")
@@ -45,12 +50,17 @@ public class UserController {
         return ResponseEntity.ok(messageResponse);
     }
 
-    @PostMapping
-    public ResponseEntity<MessageResponse> saveUser(@Valid @RequestBody UserEntityDTO userDTO) {
-        LOGGER.info("Saving user");
+    @PostMapping("/auth/sign-up")
+    public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody UserEntityDTO userDTO) {
+        LOGGER.info("Registering user");
         userService.registerUser(userDTO);
         MessageResponse messageResponse = new MessageResponse("User registered successfully", null);
         return ResponseEntity.status(HttpStatus.CREATED).body(messageResponse);
+    }
+
+    @PostMapping("/auth/sign-in")
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest user) {
+        return ResponseEntity.ok(authService.login(user));
     }
 
     @PutMapping("/{id}")

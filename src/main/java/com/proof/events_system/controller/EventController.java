@@ -1,5 +1,6 @@
 package com.proof.events_system.controller;
 
+import com.proof.events_system.domain.entity.Event;
 import com.proof.events_system.dto.EventDTO;
 import com.proof.events_system.payload.response.MessageResponse;
 import com.proof.events_system.service.implement.EventService;
@@ -8,16 +9,18 @@ import jakarta.validation.constraints.Min;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping("/events")
-@Validated //recordar para que sirve esta anotacion
+@Validated
 public class EventController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
@@ -34,6 +37,30 @@ public class EventController {
         LOGGER.info("Getting event by id");
         EventDTO eventFind = eventService.getEventById(id);
         MessageResponse messageResponse = new MessageResponse("Event found successfully", eventFind);
+        return ResponseEntity.ok(messageResponse);
+    }
+
+    @GetMapping("/date")
+    public ResponseEntity<MessageResponse> getEventsByDate(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        LOGGER.info("Getting events by date");
+        List<EventDTO> events = eventService.getEventsByDate(date);
+        MessageResponse messageResponse = new MessageResponse("Event found successfully", events);
+        return ResponseEntity.ok(messageResponse);
+    }
+
+    @GetMapping("/location")
+    public ResponseEntity<MessageResponse> getEventsByLocation(@RequestParam("location") String location) {
+        LOGGER.info("Getting events by location");
+        List<EventDTO> events = eventService.getEventsByLocation(location);
+        MessageResponse messageResponse = new MessageResponse("Events found successfully", events);
+        return ResponseEntity.ok(messageResponse);
+    }
+
+    @GetMapping("/available")
+    public ResponseEntity<MessageResponse> getAvailableEvents() {
+        LOGGER.info("Getting available events");
+        List<EventDTO> events = eventService.getAvailableEvents();
+        MessageResponse messageResponse = new MessageResponse("Events found successfully", events);
         return ResponseEntity.ok(messageResponse);
     }
 

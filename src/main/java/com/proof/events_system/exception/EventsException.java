@@ -5,13 +5,11 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 
 public class EventsException extends RuntimeException {
-    // Código de estado a responder
+
     private HttpStatus status;
 
-    // Título del error
     private String description;
 
-    // Razones del error
     private List<String> reasons;
 
     public EventsException(ApiError error) {

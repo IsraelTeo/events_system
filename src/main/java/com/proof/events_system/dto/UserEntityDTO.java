@@ -1,6 +1,7 @@
 package com.proof.events_system.dto;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,6 +16,9 @@ public class UserEntityDTO {
     @Size(max = 70, message = "The last name cannot exceed 70 characters")
     private String lastName;
 
+    @Email(message = "Enter a valid email")
+    private String email;
+
     @NotBlank(message = "The password cannot be blank")
     private String password;
 
@@ -25,9 +29,10 @@ public class UserEntityDTO {
     public UserEntityDTO() {
     }
 
-    public UserEntityDTO(String firstName, String lastName, String password, RoleEntityDTO role) {
+    public UserEntityDTO(String firstName, String lastName, String email, String password, RoleEntityDTO role) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
         this.password = password;
         this.role = role;
     }
@@ -46,6 +51,14 @@ public class UserEntityDTO {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

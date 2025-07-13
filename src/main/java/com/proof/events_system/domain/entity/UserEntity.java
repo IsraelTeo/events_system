@@ -19,13 +19,26 @@ public class UserEntity {
     @Column(name = "last_name", length = 70, nullable = false)
     private String lastName;
 
+    @Column(nullable = false, unique = true)
+    private String email;
+
     @Column(nullable = false)
     private String password;
 
+    private Boolean enabled;
+
+    @Column(name = "account_non_expired")
+    private Boolean accountNonExpired;
+
+    @Column(name = "account_non_locked")
+    private Boolean accountNonLocked;
+
+    @Column(name = "credentials_non_expired")
+    private Boolean credentialsNonExpired;
+
     @OneToOne(
             fetch = FetchType.EAGER,
-            targetEntity = RoleEntity.class,
-            cascade = CascadeType.PERSIST
+            targetEntity = RoleEntity.class
     )
     @JoinColumn(name = "role_id")
     private RoleEntity role;
@@ -49,11 +62,18 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String firstName, String lastName, String password, RoleEntity role, List<Reservation> reservations, LocalDate createAt) {
+    public UserEntity(Long id, String firstName, String lastName, String email, String password, Boolean enabled,
+                      Boolean accountNonExpired, Boolean accountNonLocked, Boolean credentialsNonExpired, RoleEntity role,
+                      List<Reservation> reservations, LocalDate createAt) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
         this.password = password;
+        this.enabled = enabled;
+        this.accountNonExpired = accountNonExpired;
+        this.accountNonLocked = accountNonLocked;
+        this.credentialsNonExpired = credentialsNonExpired;
         this.role = role;
         this.reservations = reservations;
         this.createAt = createAt;
@@ -83,12 +103,52 @@ public class UserEntity {
         this.lastName = lastName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Boolean getAccountNonExpired() {
+        return accountNonExpired;
+    }
+
+    public void setAccountNonExpired(Boolean accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
+    }
+
+    public Boolean getAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(Boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
+    public Boolean getCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+
+    public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
     }
 
     public RoleEntity getRole() {

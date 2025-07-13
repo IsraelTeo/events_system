@@ -10,7 +10,7 @@ public interface IReservationService {
 
     List<ReservationDTO> getAllReservations();
 
-    void registerReservation(ReservationDTO reservationDTO);
+    boolean registerReservation(ReservationDTO reservationDTO);
 
     ReservationDTO updateReservation(Long id,  ReservationDTO reservationDTO);
 
